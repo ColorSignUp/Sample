@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Period & Result with Immediate Display</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+            background: linear-gradient(to bottom right, #e6f9f2, #c1e9db);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container Styling */
+        .container {
+            width: 360px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Input Section */
+        .input-group {
+            text-align: left;
+        }
+
+        .input-group span {
+            font-size: 15px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        /* Result Section */
+        .result-display {
+            font-size: 18px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        /* Remaining Time Display */
+        .remaining-time {
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+            margin-top: -10px;
+        }
+
+        /* Button Styling */
+        .fix-btn {
+            background-color: #009688;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .fix-btn:hover {
+            background-color: #00796b;
+        }
+    </style>
+    <script>
+        let currentPeriod = null; // Holds the current period
+        const resultsStore = {}; // Store period results
+        let remainingTimeInterval;
+
+        // Generate a random result
+        function generateResult() {
+            const randomNumber = Math.floor(Math.random() * 10); // Random number between 0 and 9
+            const size = randomNumber <= 4 ? "SMALL" : "BIG";
+            const color = randomNumber % 2 === 0 ? "🔴" : "🟢";
+            return `${randomNumber} (${size}) ${color}`;
+        }
+
+        // Function to update period and result based on time
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = now.getHours();
+            const minutes = now.getMinutes() + 1;
+
+            const totalMinutes = String(hours * 60 + minutes).padStart(2, '0');
+            const displayTime = `${year}${month}${day}01${totalMinutes}`;
+
+            if (currentPeriod !== null) {
+                currentPeriod++; // Increment period
+                document.getElementById('period-input').value = currentPeriod; // Update the period input
+                if (!resultsStore[currentPeriod]) {
+                    resultsStore[currentPeriod] = generateResult();
+                }
+                document.getElementById('result').textContent = `Result: ${resultsStore[currentPeriod]}`;
+            }
+
+            // Schedule next update
+            const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000;
+            setTimeout(updateTime, millisecondsUntilNextMinute);
+
+            // Start countdown for remaining time
+            startRemainingTimeCountdown();
+        }
+
+        // Function to display remaining time until the next minute
+        function startRemainingTimeCountdown() {
+            clearInterval(remainingTimeInterval); // Clear any existing intervals
+            let remainingSeconds = 60 - new Date().getSeconds();
+
+            // Update the remaining time every second
+            remainingTimeInterval = setInterval(() => {
+                document.getElementById('remaining-time').textContent = `Remaining Time: ${remainingSeconds}s`;
+                remainingSeconds--;
+
+                // Stop the countdown when time reaches 0
+                if (remainingSeconds < 0) {
+                    clearInterval(remainingTimeInterval);
+                }
+            }, 1000);
+        }
+
+        // Function to fix the period and show result immediately
+        function fixPeriod() {
+            const periodInput = document.getElementById('period-input');
+
+            // If no period is entered, show an alert
+            if (!periodInput.value) {
+                alert("Please enter the Period number.");
+                return;
+            }
+
+            // Lock the initial period and show result immediately
+            currentPeriod = parseInt(periodInput.value);
+            periodInput.disabled = true; // Disable further editing
+            document.getElementById('fix-btn').disabled = true; // Disable the Fix button
+
+            // Show result for the entered period immediately
+            if (!resultsStore[currentPeriod]) {
+                resultsStore[currentPeriod] = generateResult();
+            }
+            document.getElementById('result').textContent = `Result: ${resultsStore[currentPeriod]}`;
+
+            // Start updating based on timer
+            startRemainingTimeCountdown(); // Start the countdown immediately
+            updateTime(); // Begin the periodic updates
+        }
+
+        window.onload = startRemainingTimeCountdown;
+    </script>
+</head>
+<body>
+<div class="container">
+    <!-- Input Section -->
+    <div class="input-group">
+        <span>Period:</span>
+        <input type="text" id="period-input" placeholder="Enter Period" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+    </div>
+
+    <!-- Result Section -->
+    <div class="result-display" id="result">Result: --</div>
+    <div class="remaining-time" id="remaining-time">Remaining Time: --</div>
+
+    <!-- Fix Button -->
+    <button id="fix-btn" class="fix-btn" onclick="fixPeriod()">Fix</button>
+</div>
+</body>
+</html>
