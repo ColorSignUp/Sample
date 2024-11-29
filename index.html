@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Period & Result with Immediate Display</title>
+    <title>91 Club Hack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         /* Basic Reset */
         * {
@@ -35,44 +36,117 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        /* Input Section */
-        .input-group {
-            text-align: left;
+        /* Safe Tag */
+        .safe-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 15px;
+            border: 2px solid #388E3C;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            z-index: 10;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .input-group span {
+        /* Header Section */
+        .header {
             font-size: 15px;
-            color: #444;
+            color: #666;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .online-users {
+            color: #34a853;
             font-weight: bold;
         }
 
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 15px;
+        /* User Info */
+        .user-info {
+            font-size: 14px;
+            color: #555;
             margin-top: 5px;
         }
 
-        /* Result Section */
-        .result-display {
+        /* Logo and Title */
+        .logo img {
+            max-width: 120px;
+            margin: 0 auto;
+            display: block;
+        }
+        .title {
             font-size: 18px;
             color: #444;
+            margin: 0;
             font-weight: bold;
         }
 
-        /* Remaining Time Display */
-        .remaining-time {
-            font-size: 14px;
-            color: #666;
-            font-weight: bold;
-            margin-top: -10px;
+        /* Instruction Boxes */
+        .instruction-box {
+            font-size: 15px;
+            color: #444;
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: left;
         }
 
         /* Button Styling */
+        .button {
+            background-color: #e0f7fa;
+            color: #009688;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #b2dfdb;
+        }
+
+        /* Unique Button for Register */
+        .register-btn {
+            background-color: #ff7043;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .register-btn:hover {
+            background-color: #e64a19;
+        }
+
+        /* Details Section */
+        .details {
+            text-align: left;
+            font-size: 16px;
+        }
+        .details span {
+            font-weight: bold;
+        }
+        .details .mono {
+            font-family: monospace;
+        }
+
+        /* Fix Button Styling */
         .fix-btn {
             background-color: #009688;
             color: white;
@@ -85,113 +159,112 @@
             font-size: 16px;
             transition: background-color 0.3s ease;
         }
-
         .fix-btn:hover {
             background-color: #00796b;
         }
     </style>
-    <script>
-        let currentPeriod = null; // Holds the current period
-        const resultsStore = {}; // Store period results
-        let remainingTimeInterval;
-
-        // Generate a random result
-        function generateResult() {
-            const randomNumber = Math.floor(Math.random() * 10); // Random number between 0 and 9
-            const size = randomNumber <= 4 ? "SMALL" : "BIG";
-            const color = randomNumber % 2 === 0 ? "🔴" : "🟢";
-            return `${randomNumber} (${size}) ${color}`;
-        }
-
-        // Function to update period and result based on time
-        function updateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = now.getHours();
-            const minutes = now.getMinutes() + 1;
-
-            const totalMinutes = String(hours * 60 + minutes).padStart(2, '0');
-            const displayTime = `${year}${month}${day}01${totalMinutes}`;
-
-            if (currentPeriod !== null) {
-                currentPeriod++; // Increment period
-                document.getElementById('period-input').value = currentPeriod; // Update the period input
-                if (!resultsStore[currentPeriod]) {
-                    resultsStore[currentPeriod] = generateResult();
-                }
-                document.getElementById('result').textContent = `Result: ${resultsStore[currentPeriod]}`;
-            }
-
-            // Schedule next update
-            const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000;
-            setTimeout(updateTime, millisecondsUntilNextMinute);
-
-            // Start countdown for remaining time
-            startRemainingTimeCountdown();
-        }
-
-        // Function to display remaining time until the next minute
-        function startRemainingTimeCountdown() {
-            clearInterval(remainingTimeInterval); // Clear any existing intervals
-            let remainingSeconds = 60 - new Date().getSeconds();
-
-            // Update the remaining time every second
-            remainingTimeInterval = setInterval(() => {
-                document.getElementById('remaining-time').textContent = `Remaining Time: ${remainingSeconds}s`;
-                remainingSeconds--;
-
-                // Stop the countdown when time reaches 0
-                if (remainingSeconds < 0) {
-                    clearInterval(remainingTimeInterval);
-                }
-            }, 1000);
-        }
-
-        // Function to fix the period and show result immediately
-        function fixPeriod() {
-            const periodInput = document.getElementById('period-input');
-
-            // If no period is entered, show an alert
-            if (!periodInput.value) {
-                alert("Please enter the Period number.");
-                return;
-            }
-
-            // Lock the initial period and show result immediately
-            currentPeriod = parseInt(periodInput.value);
-            periodInput.disabled = true; // Disable further editing
-            document.getElementById('fix-btn').disabled = true; // Disable the Fix button
-
-            // Show result for the entered period immediately
-            if (!resultsStore[currentPeriod]) {
-                resultsStore[currentPeriod] = generateResult();
-            }
-            document.getElementById('result').textContent = `Result: ${resultsStore[currentPeriod]}`;
-
-            // Start updating based on timer
-            startRemainingTimeCountdown(); // Start the countdown immediately
-            updateTime(); // Begin the periodic updates
-        }
-
-        window.onload = startRemainingTimeCountdown;
-    </script>
 </head>
 <body>
+<div class="safe-tag">100% Safe</div>
+
 <div class="container">
+    <!-- Header -->
+    <div class="header">
+        <span></span>
+        <span class="online-users">● Online Users: <span id="online-users">9984</span></span>
+    </div>
+    
+    <!-- User Info -->
+    <div class="user-info">User 760****736 Win ₹49793</div>
+
+    <!-- Logo -->
+    <div class="logo">
+        <img src="91club.png" alt="91 Club Logo">
+    </div>
+    <div class="title">91club (hack)</div>
+    
     <!-- Input Section -->
     <div class="input-group">
         <span>Period:</span>
-        <input type="text" id="period-input" placeholder="Enter Period" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        <input type="text" id="period-input" placeholder="Enter Period" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
-
-    <!-- Result Section -->
-    <div class="result-display" id="result">Result: --</div>
-    <div class="remaining-time" id="remaining-time">Remaining Time: --</div>
 
     <!-- Fix Button -->
     <button id="fix-btn" class="fix-btn" onclick="fixPeriod()">Fix</button>
+
+    <!-- Details Section -->
+    <div id="details-section" class="details" style="display: none;">
+        <p><span>Mode:</span> WinGo(1m)</p>
+        <p><span>Remaining Time:</span> <span id="remaining-time-display" class="mono"></span></p>
+        <p><span>Period:</span> <span id="period-display" class="mono"></span></p>
+        <p><span>Result:</span> <span id="result-display" style="font-weight: bold;"></span></p>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instruction-box">
+        Create a new 91club account by clicking on 'Register' button. If you use this mod in an old account, it may not work.
+    </div>
+    <div class="instruction-box">
+        'Register' बटन पर क्लिक करके एक नया account बनाएं। यदि आप इस मॉड का उपयोग पुराने account में करते हैं, तो यह काम नहीं करेगा।
+    </div>
+
+    <!-- Buttons -->
+    <button class="button register-btn" onclick="window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
+    <button class="button" onclick="window.open('https://telegram.dog/EarningScripter1', '_blank')">Join Telegram</button>
+    <button class="button" onclick="window.open('https://telegram.dog/EarningScripter1_bot', '_blank')">Customer Care</button>
 </div>
+<script>
+    let countdownInterval; // Declare the interval globally
+
+    // Fix Period Functionality
+    let currentPeriod = null;
+
+    function fixPeriod() {
+        const periodInput = document.getElementById('period-input');
+        if (!periodInput.value) {
+            alert("Please enter the Period number.");
+            return;
+        }
+
+        currentPeriod = parseInt(periodInput.value);
+        periodInput.disabled = true;
+        document.getElementById('fix-btn').style.display = 'none';
+        document.getElementById('details-section').style.display = 'block';
+
+        startCountdown(); // Start the countdown
+        updateResult();
+    }
+
+    // Update the Result Section
+    function updateResult() {
+        const randomNum = Math.floor(Math.random() * 10);
+        const size = randomNum <= 4 ? "SMALL" : "BIG";
+        const color = randomNum % 2 === 0 ? "🔴" : "🟢";
+        const result = `${randomNum} (${size}) ${color}`;
+
+        document.getElementById('result-display').textContent = result;
+        document.getElementById('period-display').textContent = currentPeriod;
+    }
+
+    // Countdown Timer Logic
+    function startCountdown() {
+        let remainingTime = 60; // Set initial time to 60 seconds
+        const remainingTimeDisplay = document.getElementById('remaining-time-display');
+
+        // Clear any existing intervals
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        countdownInterval = setInterval(() => {
+            if (remainingTime <= 0) {
+                clearInterval(countdownInterval);
+                remainingTimeDisplay.textContent = "Time Up!";
+            } else {
+                remainingTime--;
+                remainingTimeDisplay.textContent = `${remainingTime}s`;
+            }
+        }, 1000); // Update every second
+    }
+</script>
+
 </body>
 </html>
