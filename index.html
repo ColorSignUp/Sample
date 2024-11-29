@@ -213,12 +213,60 @@
     <button class="button" onclick="window.open('https://telegram.dog/EarningScripter1', '_blank')">Join Telegram</button>
     <button class="button" onclick="window.open('https://telegram.dog/EarningScripter1_bot', '_blank')">Customer Care</button>
 </div>
+
 <script>
-    let countdownInterval; // Declare the interval globally
+    // Simulate online users count
+    function updateOnlineUsers() {
+        document.getElementById("online-users").textContent = Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000;
+    }
+    setInterval(updateOnlineUsers, 1000);
+
+    // Variables for period and results tracking
+    let currentPeriod = null;
+    const resultsStore = {};
+    let remainingTimeInterval;
+
+    // Generate a random result
+    function generateResult() {
+        const randomNumber = Math.floor(Math.random() * 10);
+        const size = randomNumber <= 4 ? "SMALL" : "BIG";
+        const color = randomNumber % 2 === 0 ? "🔴" : "🟢";
+        return `${randomNumber} (${size}) ${color}`;
+    }
+
+    // Start the timer countdown
+    function startRemainingTimeCountdown() {
+        clearInterval(remainingTimeInterval);
+        let remainingSeconds = 60 - new Date().getSeconds();
+
+        remainingTimeInterval = setInterval(() => {
+            document.getElementById('remaining-time-display').textContent = `${remainingSeconds}s`;
+            remainingSeconds--;
+
+            if (remainingSeconds < 0) {
+                clearInterval(remainingTimeInterval);
+            }
+        }, 1000);
+    }
+
+    // Update period and result based on the timer
+    function updateTime() {
+        const now = new Date();
+        currentPeriod++;
+        document.getElementById('period-display').textContent = currentPeriod;
+
+        if (!resultsStore[currentPeriod]) {
+            resultsStore[currentPeriod] = generateResult();
+        }
+        document.getElementById('result-display').textContent = resultsStore[currentPeriod];
+
+        const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000;
+        setTimeout(updateTime, millisecondsUntilNextMinute);
+
+        startRemainingTimeCountdown();
+    }
 
     // Fix Period Functionality
-    let currentPeriod = null;
-
     function fixPeriod() {
         const periodInput = document.getElementById('period-input');
         if (!periodInput.value) {
@@ -231,40 +279,8 @@
         document.getElementById('fix-btn').style.display = 'none';
         document.getElementById('details-section').style.display = 'block';
 
-        startCountdown(); // Start the countdown
-        updateResult();
-    }
-
-    // Update the Result Section
-    function updateResult() {
-        const randomNum = Math.floor(Math.random() * 10);
-        const size = randomNum <= 4 ? "SMALL" : "BIG";
-        const color = randomNum % 2 === 0 ? "🔴" : "🟢";
-        const result = `${randomNum} (${size}) ${color}`;
-
-        document.getElementById('result-display').textContent = result;
-        document.getElementById('period-display').textContent = currentPeriod;
-    }
-
-    // Countdown Timer Logic
-    function startCountdown() {
-        let remainingTime = 60; // Set initial time to 60 seconds
-        const remainingTimeDisplay = document.getElementById('remaining-time-display');
-
-        // Clear any existing intervals
-        if (countdownInterval) clearInterval(countdownInterval);
-
-        countdownInterval = setInterval(() => {
-            if (remainingTime <= 0) {
-                clearInterval(countdownInterval);
-                remainingTimeDisplay.textContent = "Time Up!";
-            } else {
-                remainingTime--;
-                remainingTimeDisplay.textContent = `${remainingTime}s`;
-            }
-        }, 1000); // Update every second
+        updateTime(); // Start the countdown and update
     }
 </script>
-
 </body>
 </html>
