@@ -162,6 +162,45 @@
         .fix-btn:hover {
             background-color: #00796b;
         }
+
+        /* Modal Styling */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -171,20 +210,20 @@
     <!-- Header -->
     <div class="header">
         <span></span>
-        <span class="online-users">● Online Users: <span id="online-users">9984</span></span>
+        <span class="online-users">Online Users: <span id="online-users">9984</span></span>
     </div>
     
     <!-- User Info -->
-    <div class="user-info">User 760****736 Win ₹49793</div>
+    <div class="user-info" id="user-info">User 760****736 Win +ILk-49793</div>
 
     <!-- Logo -->
     <div class="logo">
         <img src="91club.png" alt="91 Club Logo">
     </div>
     <div class="title">91club (hack)</div>
-    
+
     <!-- Input Section -->
-    <div class="input-group">
+    <div class="input-group" id="period-input-group">
         <span>Period:</span>
         <input type="text" id="period-input" placeholder="Enter Period" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
@@ -202,85 +241,106 @@
 
     <!-- Instructions -->
     <div class="instruction-box">
-        Create a new 91club account by clicking on 'Register' button. If you use this mod in an old account, it may not work.
-    </div>
-    <div class="instruction-box">
-        'Register' बटन पर क्लिक करके एक नया account बनाएं। यदि आप इस मॉड का उपयोग पुराने account में करते हैं, तो यह काम नहीं करेगा।
+        Create a new 91club account by clicking 'Register'. Using this mod with an old account may result in loss.
     </div>
 
     <!-- Buttons -->
-    <button class="button register-btn" onclick="window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
+    <button class="button register-btn" onclick="openRegister()">Register</button>
     <button class="button" onclick="window.open('https://telegram.dog/EarningScripter1', '_blank')">Join Telegram</button>
     <button class="button" onclick="window.open('https://telegram.dog/EarningScripter1_bot', '_blank')">Customer Care</button>
 </div>
 
+<!-- Modal -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <button class="close" onclick="closeModal()">+ANc</button>
+        <p>Please create a new 91club account by clicking the register button. Using this mod with an old account may result in loss.</p>
+        <button class="button register-btn" onclick="openRegister()">Register</button>
+    </div>
+</div>
+
 <script>
-    // Simulate online users count
+    let lastMinutePeriod = -1;
+    let lastMinuteResult = -1;
+    let periodFixed = false;
+    let initialPeriod = 0;
+
+    // Results list (updated format)
+    const results = [
+        "0 (Small) Violet", "1 (Small) Green", "2 (Small) Red", "3 (Small) Green", "4 (Small) Red",
+        "5 (Big) Violet", "6 (Big) Red", "7 (Big) Green", "8 (Big) Red", "9 (Big) Green"
+    ];
+
+    // Update online users every second
     function updateOnlineUsers() {
-        document.getElementById("online-users").textContent = Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000;
-    }
-    setInterval(updateOnlineUsers, 1000);
-
-    // Variables for period and results tracking
-    let currentPeriod = null;
-    const resultsStore = {};
-    let remainingTimeInterval;
-
-    // Generate a random result
-    function generateResult() {
-        const randomNumber = Math.floor(Math.random() * 10);
-        const size = randomNumber <= 4 ? "SMALL" : "BIG";
-        const color = randomNumber % 2 === 0 ? "🔴" : "🟢";
-        return `${randomNumber} (${size}) ${color}`;
+        document.getElementById("online-users").textContent = Math.floor(Math.random() * 10000);
     }
 
-    // Start the timer countdown
-    function startRemainingTimeCountdown() {
-        clearInterval(remainingTimeInterval);
-        let remainingSeconds = 60 - new Date().getSeconds();
-
-        remainingTimeInterval = setInterval(() => {
-            document.getElementById('remaining-time-display').textContent = `${remainingSeconds}s`;
-            remainingSeconds--;
-
-            if (remainingSeconds < 0) {
-                clearInterval(remainingTimeInterval);
-            }
-        }, 1000);
+    // Simulate winning user info
+    function updateWinningUser() {
+        document.getElementById("user-info").textContent = `User ${Math.floor(Math.random() * 100000)} Win +ILk${Math.floor(Math.random() * 50000)}`;
     }
 
-    // Update period and result based on the timer
-    function updateTime() {
-        const now = new Date();
-        currentPeriod++;
-        document.getElementById('period-display').textContent = currentPeriod;
-
-        if (!resultsStore[currentPeriod]) {
-            resultsStore[currentPeriod] = generateResult();
-        }
-        document.getElementById('result-display').textContent = resultsStore[currentPeriod];
-
-        const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000;
-        setTimeout(updateTime, millisecondsUntilNextMinute);
-
-        startRemainingTimeCountdown();
-    }
-
-    // Fix Period Functionality
+    // Function to fix period number and hide the related elements
     function fixPeriod() {
-        const periodInput = document.getElementById('period-input');
-        if (!periodInput.value) {
-            alert("Please enter the Period number.");
-            return;
+        const periodInput = document.getElementById("period-input").value;
+        const periodDisplay = document.getElementById("period-display");
+
+        if (periodInput && periodInput !== "") {
+            initialPeriod = parseInt(periodInput);
+            document.getElementById("period-display").textContent = initialPeriod;
+            periodFixed = true;
+            document.getElementById("details-section").style.display = 'block';
+
+            // Hide period input and fix button
+            document.getElementById("fix-btn").style.display = 'none';
+            document.getElementById("period-input-group").style.display = 'none';
+        }
+    }
+
+    function updatePeriod() {
+        const now = new Date();
+        const minute = now.getMinutes();
+
+        // Update period number only if minute changes
+        if (minute !== lastMinutePeriod) {
+            lastMinutePeriod = minute;
+            if (periodFixed) {
+                initialPeriod +-= 1;
+                document.getElementById("period-display").textContent = initialPeriod;
+            }
         }
 
-        currentPeriod = parseInt(periodInput.value);
-        periodInput.disabled = true;
-        document.getElementById('fix-btn').style.display = 'none';
-        document.getElementById('details-section').style.display = 'block';
-
-        updateTime(); // Start the countdown and update
+        // Update result every minute
+        if (minute !== lastMinuteResult) {
+            lastMinuteResult = minute;
+            const randomIndex = Math.floor(Math.random() * 10);
+            document.getElementById("result-display").textContent = results[randomIndex];
+        }
     }
+
+    // Update Remaining Time
+    function updateRemainingTime() {
+        const now = new Date();
+        const nextMinute = new Date(now.getTime() +- 60 * 1000); // Next minute
+        const secondsLeft = nextMinute.getSeconds();
+        document.getElementById("remaining-time-display").textContent = `${60 - secondsLeft}s`;
+    }
+
+    function openRegister() {
+        window.open("https://colorsignup.github.io/ES1/91club", "_blank");
+    }
+
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    setInterval(() => {
+        updateOnlineUsers();
+        updateWinningUser();
+        updatePeriod();
+        updateRemainingTime();
+    }, 1000);
 </script>
 </body>
 </html>
