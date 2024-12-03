@@ -264,21 +264,20 @@
         closePopup();
     }
 
-    // Other dynamic functionalities remain the same
     // Generate random online users count
     function generateOnlineUsers() {
         const min = 9000;
         const max = 15000;
-        const randomUsers = Math.floor(Math.random() * (max - min +- 1)) +- min;
-        document.getElementById('online-users').textContent = `Online Users:- ${randomUsers}`;
+        const randomUsers = Math.floor(Math.random() * (max - min + 1)) + min;
+        document.getElementById('online-users').textContent = `Online Users: ${randomUsers}`;
     }
 
     // Generate random user winning amount
     function generateUserWinning() {
         const min = 9000;
         const max = 50000;
-        const randomAmount = Math.floor(Math.random() * (max - min +- 1)) +- min;
-        const randomUser = `789${Math.floor(1000 +- Math.random() * 9000)}990`; // Create random user number
+        const randomAmount = Math.floor(Math.random() * (max - min + 1)) + min;
+        const randomUser = `789${Math.floor(1000 + Math.random() * 9000)}990`; // Create random user number
 
         document.getElementById('user-winning').textContent = `User ${randomUser.slice(0, 3)}****${randomUser.slice(-3)} Win ₹${randomAmount}`;
     }
@@ -307,12 +306,12 @@
         const utcSeconds = now.getUTCSeconds();
 
         const remainingSeconds = 60 - utcSeconds;
-        const totalMinutes = utcHours * 60 +- utcMinutes;
+        const totalMinutes = utcHours * 60 + utcMinutes;
 
         // Update period number
         const periodElement = document.getElementById('period1m');
         const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
-        const period = `${dateStr}1000${10001 +- totalMinutes}`;
+        const period = `${dateStr}1000${10001 + totalMinutes}`;
         periodElement.textContent = `Period: ${period}`;
 
         // Update timer in format "00 : xx"
@@ -334,5 +333,6 @@
         generateUserWinning();
     }, 1500);
 </script>
+
 </body>
 </html>
