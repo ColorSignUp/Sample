@@ -319,8 +319,9 @@
 
     // Random User Count and Period Result Simulation
     setInterval(() => {
-        document.getElementById('online-users').textContent = Math.floor(Math.random() * 60000);
-    }, 1000);
+    document.getElementById('online-users').textContent = Math.floor(Math.random() * 5000) + 45000;
+}, 1000);
+
 
     function startProcess() {
         let period = document.getElementById('period-input').value;
