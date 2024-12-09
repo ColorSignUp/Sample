@@ -277,14 +277,15 @@
         <img src="91club.png" alt="okWin Logo" />
     </div>
     <div class="title">91club (Hack)</div>
-    <div class="box">
-        <div>Server: <span style="color:#34a853;">Active</span></div>
-        <div class="input-group">
-            <span>Period:</span>
-            <input type="text" id="period-input" placeholder="Enter Period No." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-        </div>
-        <div>Result: <span id="result">--</span></div>
+        <div class="box">
+    <div>Server: <span style="color:#34a853;">Active</span> <img src="tick.gif" alt="Tick" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;" /></div>
+    <div class="input-group">
+        <span>Period:</span>
+        <input type="text" id="period-input" placeholder="Enter Period No." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
     </div>
+    <div>Result: <span id="result">--</span></div>
+</div>
+
     <button class="start-btn" onclick="playSound(); startProcess()">Start</button>
     <div id="loading" class="loading">Loading...</div>
     <div class="instruction-box">
