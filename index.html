@@ -2,6 +2,10 @@
 
 
 
+
+
+
+
 <html lang="en">
 
 
@@ -434,17 +438,119 @@ button:hover {
 
     right: 10px;
 
-    background: none;
+    background: none; /* No background */
 
-    border: none;
+    border: none; /* No border */
 
-    font-size: 24px;
+    width: 20px; /* Minimal clickable area */
+
+    height: 20px; /* Minimal clickable area */
+
+    cursor: pointer; /* Pointer cursor on hover */
+
+    font-size: 0; /* Hides any text (like "X") */
+
+    line-height: 1; /* No extra spacing */
+
+    padding: 0; /* No padding */
+
+}
+
+
+
+.input-group {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+
+    font-size: 16px;
 
     color: #2563eb;
 
-    cursor: pointer;
+}
+
+
+
+.input-group span {
+
+    margin-right: 10px;
+
+    flex-shrink: 0;
 
 }
+
+
+
+.input-group input {
+
+    flex-grow: 1;
+
+    padding: 12px;
+
+    font-size: 16px;
+
+    border: 2px solid #dbeafe;
+
+    border-radius: 15px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #1e3a8a;
+
+    transition: all 0.3s;
+
+}
+
+.logo img {
+
+    width: 120px; /* Increased the size */
+
+    border-radius: 50%;
+
+    margin-bottom: 15px;
+
+    pointer-events: none;
+
+    user-drag: none;
+
+    -webkit-user-drag: none;
+
+    animation: bounce 1.5s infinite alternate; /* Added up and down animation */
+
+}
+
+
+
+@keyframes bounce {
+
+    0% {
+
+        transform: translateY(0);
+
+    }
+
+    50% {
+
+        transform: translateY(-10px); /* Move up */
+
+    }
+
+    100% {
+
+        transform: translateY(0); /* Back to original position */
+
+    }
+
+}
+
+
 
 
 
@@ -720,9 +826,13 @@ button:hover {
 
         <p>Please create a new 91club account by clicking on the "Register" button. Using this mod with an old account may result in loss</p>
 
-        <button class="button register-btn" onclick="window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
+        <button class="button register-btn" onclick="closeDialog(); window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
 
     </div>
+
+</div>
+
+
 
 </div>
 
@@ -732,13 +842,11 @@ button:hover {
 
     <div class="dialog-box" onclick="event.stopPropagation()">
 
-        <button class="close-btn" onclick="hideAccuracyDialog()">×</button>
+     <p>To Increase Accuracy, Create a new 91club account by clicking on "Register" button below.<br></br>सटीकता बढ़ाने के लिए, नीचे "Register" बटन पर क्लिक करके एक नया account बनाएं।</p>
 
-        <p>Create a new 91club account by the official hack link to increase accuracy. Click on the Register button below. <br></br>ᴬᶠᵗᵉʳ ᶜʳᵉᵃᵗⁱⁿᵍ ᵃ ⁿᵉʷ ᵃᶜᶜᵒᵘⁿᵗ ᵗʰᵉ ᵃᶜᶜᵘʳᵃᶜʸ ʷⁱˡˡ ⁱⁿᶜʳᵉᵃˢᵉ ᵃᵘᵗᵒᵐᵃᵗⁱᶜᵃˡˡʸ</p>
+        <button class="button register-btn" onclick="hideAccuracyDialog(); window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
 
-        <button class="button register-btn" onclick="window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
-
-    </div>
+        </div>
 
 </div>
 
@@ -748,13 +856,13 @@ button:hover {
 
     <div class="dialog-box" onclick="event.stopPropagation()">
 
-        <button class="close-btn" onclick="closeDialog()">×</button>
-
         <p>Please create a new 91club account by clicking on the "Register" button. Using this mod with an old account may result in loss</p>
 
-        <button class="button register-btn" onclick="window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
+        <button class="button register-btn" onclick="hideAccuracyDialog(); window.open('https://colorsignup.github.io/ES1/91club', '_blank')">Register</button>
 
-    </div>
+        
+
+        </div>
 
 </div>
 
@@ -949,3 +1057,5 @@ let storedResults = {}; // To store results for each period
 </body>
 
 </html>
+
+
