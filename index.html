@@ -596,157 +596,189 @@ button:hover {
 
 <style>
 
-    /* General Reset */
+/* General Reset */
 
-    * {
+* {
 
-        margin: 0;
+    margin: 0;
 
-        padding: 0;
+    padding: 0;
 
-        box-sizing: border-box;
+    box-sizing: border-box;
 
-        font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
 
-    }
+}
 
 
 
-    body {
+body, html {
 
-        background: #f4f9ff;
+    width: 100%;
 
-        display: flex;
+    height: 100%;
 
-        flex-direction: column;
+    overflow-x: hidden; /* Disable horizontal scroll */
 
-        justify-content: flex-start;
+}
 
-        align-items: center;
 
-        min-height: 100vh;
 
-        padding: 0;
+/* Body Styling */
 
-        color: #1e3a8a;
+body {
 
-    }
+    background: #f4f9ff;
 
+    display: flex;
 
+    flex-direction: column;
 
-    .container {
+    justify-content: flex-start;
 
-        width: 100%;
+    align-items: center;
 
-        max-width: 420px;
+    min-height: 100vh;
 
-        background: #ffffff;
+    padding: 0;
 
-        border-radius: 30px;
+    color: #1e3a8a;
 
-        padding: 30px;
+}
 
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 
-        text-align: center;
 
-        display: none;
+/* Container */
 
-    }
+.container {
 
+    width: 100%;
 
+    max-width: 420px;
 
-    .webview {
+    background: #ffffff;
 
-        display: none;
+    border-radius: 30px;
 
-        width: 100%;
+    padding: 30px;
 
-        height: calc(100vh - 60px); /* Exclude the navigation height */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 
-    }
+    text-align: center;
 
+    position: relative;
 
+    overflow-x: hidden; /* Prevent horizontal scroll in container */
 
-    iframe {
+    margin-bottom: 60px; /* To account for the fixed navigation bar */
 
-        width: 100%;
+}
 
-        height: 100%;
 
-        border: none;
 
-    }
+/* Webview Section */
 
+.webview {
 
+    display: none;
 
-    .bottom-nav {
+    width: 100%;
 
-        position: fixed;
+    height: calc(100vh - 60px); /* Exclude the navigation height */
 
-        bottom: 0;
+    border-radius: 30px 30px 0 0;
 
-        width: 100%;
+    overflow: hidden;
 
-        max-width: 420px;
+}
 
-        height: 60px;
 
-        display: flex;
 
-        justify-content: space-around;
+iframe {
 
-        align-items: center;
+    width: 100%;
 
-        background: #ffffff;
+    height: 100%;
 
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    border: none;
 
-        border-radius: 15px 15px 0 0;
+}
 
-    }
 
 
+/* Bottom Navigation */
 
-    .bottom-nav button {
+.bottom-nav {
 
-        flex: 1;
+    position: fixed;
 
-        text-align: center;
+    bottom: 0;
 
-        padding: 10px 0;
+    width: 100%;
 
-        border: none;
+    height: 60px;
 
-        background: none;
+    display: flex;
 
-        font-size: 16px;
+    justify-content: space-around;
 
-        color: #2563eb;
+    align-items: center;
 
-        font-weight: bold;
+    background: #ffffff;
 
-        cursor: pointer;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 
-    }
+    border-radius: 15px 15px 0 0;
 
+    z-index: 1000;
 
+}
 
-    .bottom-nav button.active {
 
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
 
-        color: white;
+.bottom-nav button {
 
-        border-radius: 10px;
+    flex: 1;
 
-        margin: 5px;
+    text-align: center;
 
-        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    padding: 10px 0;
 
-    }
+    border: none;
+
+    background: none;
+
+    font-size: 16px;
+
+    color: #2563eb;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+
+.bottom-nav button.active {
+
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+
+    color: white;
+
+    border-radius: 10px;
+
+    margin: 5px;
+
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+
+}
 
 </style>
+
+
+
+
 
 </head>
 
@@ -872,7 +904,7 @@ button:hover {
 
     <div class="webview" id="game-content">
 
-        <iframe src="https://aanclub.com"></iframe>
+        <iframe src="https://colorsignup.github.io/ES1/91club"></iframe>
 
     </div>
 
