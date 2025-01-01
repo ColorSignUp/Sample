@@ -38,25 +38,10 @@
             color: #4A4A4A;
         }
 
-        #question {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
+        p {
             font-size: 16px;
+            color: #555;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="text"]:focus {
-            border-color: #74ebd5;
         }
 
         button {
@@ -67,8 +52,8 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
             margin-top: 10px;
+            width: 100%;
             transition: background 0.3s ease;
         }
 
@@ -76,20 +61,8 @@
             background: #5548c8;
         }
 
-        #response {
-            font-size: 16px;
-            color: #444;
-            font-style: italic;
-            margin-top: 15px;
-        }
-
-        #newBtn {
-            background: #4caf50;
-            margin-top: 20px;
-        }
-
-        #newBtn:hover {
-            background: #388e3c;
+        .hidden {
+            display: none;
         }
 
         table {
@@ -131,39 +104,77 @@
 </head>
 <body>
     <div class="container">
-        <h1>Interactive Bot</h1>
-        <p id="question">What's your name?</p>
-        <input type="text" id="input" placeholder="Type here..." />
-        <button onclick="processInput()">Send</button>
-        <p id="response"></p>
-        <button onclick="newScript()" style="display:none;" id="newBtn">Start Again</button>
+        <!-- Step 1: Registration Warning -->
+        <div id="step1">
+            <p>Register a new account by clicking on the register button. If you use this mod in your old account, then it will be a loss.</p>
+            <button onclick="goToStep2()">Done</button>
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Balance</th>
-                    <th>Period</th>
-                    <th>Result</th>
-                </tr>
-            </thead>
-            <tbody id="infoTable">
-                <tr>
-                    <td id="nameCell">-</td>
-                    <td id="balanceCell">-</td>
-                    <td id="periodCell">-</td>
-                    <td id="resultCell">-</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Step 2: Confirmation -->
+        <div id="step2" class="hidden">
+            <p>Really? Are you sure? Remember, if you did not create a new account, the hack will not work.</p>
+            <button onclick="startProcess()">Yes, I'm sure.</button>
+            <button onclick="goToStep1()">No, okay wait, I register.</button>
+        </div>
+
+        <!-- Step 3: Main Bot Logic -->
+        <div id="step3" class="hidden">
+            <h1>Interactive Bot</h1>
+            <p id="question">What's your name?</p>
+            <input type="text" id="input" placeholder="Type here..." />
+            <button onclick="processInput()">Send</button>
+            <p id="response"></p>
+            <button onclick="newScript()" style="display:none;" id="newBtn">Start Again</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Balance</th>
+                        <th>UID</th>
+                        <th>Period</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="infoTable">
+                    <tr>
+                        <td id="nameCell">-</td>
+                        <td id="balanceCell">-</td>
+                        <td id="uidCell">-</td>
+                        <td id="periodCell">-</td>
+                        <td id="resultCell">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         let step = 1;
         let userName = "";
         let userBalance = 0;
+        let userUID = "";
         let userNumber = 0;
 
+        // Go to Step 2
+        function goToStep2() {
+            document.getElementById("step1").classList.add("hidden");
+            document.getElementById("step2").classList.remove("hidden");
+        }
+
+        // Return to Step 1
+        function goToStep1() {
+            document.getElementById("step2").classList.add("hidden");
+            document.getElementById("step1").classList.remove("hidden");
+        }
+
+        // Start the main process (Step 3)
+        function startProcess() {
+            document.getElementById("step2").classList.add("hidden");
+            document.getElementById("step3").classList.remove("hidden");
+        }
+
+        // Main logic to process input
         function processInput() {
             const inputField = document.getElementById("input");
             const response = document.getElementById("response");
@@ -190,11 +201,18 @@
                 }
                 userBalance = parseFloat(input);
                 document.getElementById("balanceCell").textContent = userBalance;
-                question.textContent = "Tell me the number (Period):";
+                question.textContent = "Enter your UID:";
                 inputField.value = "";
                 response.textContent = "";
                 step = 3;
             } else if (step === 3) {
+                userUID = input;
+                document.getElementById("uidCell").textContent = userUID;
+                question.textContent = "Tell me the number (Period):";
+                inputField.value = "";
+                response.textContent = "";
+                step = 4;
+            } else if (step === 4) {
                 if (isNaN(input)) {
                     response.textContent = "Please enter a valid number!";
                     return;
@@ -204,8 +222,8 @@
                 question.textContent = "OK, now tell me what was the last result: Big or Small?";
                 inputField.value = "";
                 response.textContent = "";
-                step = 4;
-            } else if (step === 4) {
+                step = 5;
+            } else if (step === 5) {
                 if (input.toLowerCase() !== "big" && input.toLowerCase() !== "small") {
                     response.textContent = "Please enter 'big' or 'small'!";
                     return;
@@ -213,10 +231,10 @@
                 const lastDigit = userNumber % 10;
                 let result;
 
-                if (input.toLowerCase() === "big") {
-                    result = lastDigit % 2 === 1 ? userNumber : Math.random() < 0.5 ? "BIG" : "SMALL";
+                if (lastDigit % 2 === 1) {
+                    result = input.toUpperCase(); // If odd, show the user's input.
                 } else {
-                    result = Math.random() < 0.5 ? "BIG" : "SMALL";
+                    result = Math.random() < 0.5 ? "BIG" : "SMALL"; // If even, randomize the result.
                 }
 
                 document.getElementById("resultCell").textContent = result;
@@ -224,31 +242,29 @@
                 question.textContent = "If you want to start again, click 'Start Again'.";
                 inputField.style.display = "none";
                 newBtn.style.display = "block";
-                step = 5;
+                step = 6;
             }
         }
 
+        // Reset everything
         function newScript() {
             step = 1;
             userName = "";
             userBalance = 0;
+            userUID = "";
             userNumber = 0;
-
-            const response = document.getElementById("response");
-            const newBtn = document.getElementById("newBtn");
-            const question = document.getElementById("question");
-            const inputField = document.getElementById("input");
 
             document.getElementById("nameCell").textContent = "-";
             document.getElementById("balanceCell").textContent = "-";
+            document.getElementById("uidCell").textContent = "-";
             document.getElementById("periodCell").textContent = "-";
             document.getElementById("resultCell").textContent = "-";
 
-            question.textContent = "What's your name?";
-            inputField.value = "";
-            inputField.style.display = "block";
-            response.textContent = "";
-            newBtn.style.display = "none";
+            document.getElementById("response").textContent = "";
+            document.getElementById("newBtn").style.display = "none";
+
+            document.getElementById("step3").classList.add("hidden");
+            document.getElementById("step1").classList.remove("hidden");
         }
     </script>
 </body>
