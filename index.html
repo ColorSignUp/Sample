@@ -14,20 +14,21 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #8e9eab, #eef2f3);
+            background: linear-gradient(135deg, #eef2f3, #8e9eab);
             color: #333;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
             background: #ffffff;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             width: 400px;
-            padding: 20px 30px;
+            padding: 25px 35px;
             text-align: center;
             animation: fadeIn 1s ease-in-out;
         }
@@ -59,6 +60,15 @@
 
         button:hover {
             background: #5548c8;
+        }
+
+        .alt-button {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .alt-button:hover {
+            background: #388e3c;
         }
 
         .hidden {
@@ -106,7 +116,8 @@
     <div class="container">
         <!-- Step 1: Registration Warning -->
         <div id="step1">
-            <p>Register a new account by clicking on the register button. If you use this mod in your old account, then it will be a loss.</p>
+            <p>Register a new account by clicking the "Register" button. If you use this mod in your old account, then it will be a loss.</p>
+            <button class="alt-button" onclick="register()">Register</button>
             <button onclick="goToStep2()">Done</button>
         </div>
 
@@ -120,7 +131,7 @@
         <!-- Step 3: Main Bot Logic -->
         <div id="step3" class="hidden">
             <h1>Interactive Bot</h1>
-            <p id="question">What's your name?</p>
+            <p id="question">Enter your UID:</p>
             <input type="text" id="input" placeholder="Type here..." />
             <button onclick="processInput()">Send</button>
             <p id="response"></p>
@@ -129,18 +140,18 @@
             <table>
                 <thead>
                     <tr>
+                        <th>UID</th>
                         <th>Name</th>
                         <th>Balance</th>
-                        <th>UID</th>
                         <th>Period</th>
                         <th>Result</th>
                     </tr>
                 </thead>
                 <tbody id="infoTable">
                     <tr>
+                        <td id="uidCell">-</td>
                         <td id="nameCell">-</td>
                         <td id="balanceCell">-</td>
-                        <td id="uidCell">-</td>
                         <td id="periodCell">-</td>
                         <td id="resultCell">-</td>
                     </tr>
@@ -151,10 +162,15 @@
 
     <script>
         let step = 1;
+        let userUID = "";
         let userName = "";
         let userBalance = 0;
-        let userUID = "";
         let userNumber = 0;
+
+        // Simulate registration process
+        function register() {
+            alert("Registering a new account...");
+        }
 
         // Go to Step 2
         function goToStep2() {
@@ -188,26 +204,26 @@
             }
 
             if (step === 1) {
+                userUID = input;
+                document.getElementById("uidCell").textContent = userUID;
+                question.textContent = "What's your name?";
+                inputField.value = "";
+                response.textContent = "";
+                step = 2;
+            } else if (step === 2) {
                 userName = input;
                 document.getElementById("nameCell").textContent = userName;
                 question.textContent = `OK, ${userName}, tell me your balance.`;
                 inputField.value = "";
                 response.textContent = "";
-                step = 2;
-            } else if (step === 2) {
+                step = 3;
+            } else if (step === 3) {
                 if (isNaN(input)) {
                     response.textContent = "Please enter a valid number!";
                     return;
                 }
                 userBalance = parseFloat(input);
                 document.getElementById("balanceCell").textContent = userBalance;
-                question.textContent = "Enter your UID:";
-                inputField.value = "";
-                response.textContent = "";
-                step = 3;
-            } else if (step === 3) {
-                userUID = input;
-                document.getElementById("uidCell").textContent = userUID;
                 question.textContent = "Tell me the number (Period):";
                 inputField.value = "";
                 response.textContent = "";
@@ -249,14 +265,14 @@
         // Reset everything
         function newScript() {
             step = 1;
+            userUID = "";
             userName = "";
             userBalance = 0;
-            userUID = "";
             userNumber = 0;
 
+            document.getElementById("uidCell").textContent = "-";
             document.getElementById("nameCell").textContent = "-";
             document.getElementById("balanceCell").textContent = "-";
-            document.getElementById("uidCell").textContent = "-";
             document.getElementById("periodCell").textContent = "-";
             document.getElementById("resultCell").textContent = "-";
 
