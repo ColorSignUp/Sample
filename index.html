@@ -14,92 +14,130 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #eef2f3, #8e9eab);
-            color: #333;
+            background: linear-gradient(-45deg, #6a11cb, #2575fc, #6a11cb, #ff6a00);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            color: #fff;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .container {
-            background: #ffffff;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
             border-radius: 15px;
+            padding: 30px;
             width: 400px;
-            padding: 25px 35px;
-            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             animation: fadeIn 1s ease-in-out;
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #4A4A4A;
-        }
-
-        p {
-            font-size: 16px;
-            color: #555;
+        h1, h2, p {
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        button {
-            background: #6c63ff;
-            color: #fff;
-            padding: 12px 20px;
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
             font-size: 16px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        input::placeholder {
+            color: #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            margin-top: 10px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-            transition: background 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         button:hover {
-            background: #5548c8;
+            transform: scale(1.05);
         }
 
-        .alt-button {
-            background: #4caf50;
-            color: #fff;
+        .register-btn {
+            background-color: #ff6a00;
         }
 
-        .alt-button:hover {
-            background: #388e3c;
+        .done-btn {
+            background-color: #6a11cb;
+        }
+
+        .confirm-btn {
+            background-color: #28a745;
+        }
+
+        .back-btn {
+            background-color: #dc3545;
+        }
+
+        .dashboard-btn {
+            background-color: #007bff;
+        }
+
+        .start-btn {
+            background-color: #17a2b8;
+        }
+
+        .re-start-btn {
+            background-color: #ffc107;
         }
 
         .hidden {
             display: none;
         }
 
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 10px;
+        .box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
             text-align: left;
         }
 
-        th {
-            background-color: #6c63ff;
-            color: white;
-        }
-
-        td {
-            color: #333;
-        }
-
-        /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -114,173 +152,152 @@
 </head>
 <body>
     <div class="container">
-        <!-- Step 1: Registration Warning -->
+        <!-- Step 1: Registration -->
         <div id="step1">
-            <p>Register a new account by clicking the "Register" button. If you use this mod in your old account, then it will be a loss.</p>
-            <button class="alt-button" onclick="register()">Register</button>
-            <button onclick="goToStep2()">Done</button>
+            <h1>Welcome!</h1>
+            <p>Make a new account by clicking on the "REGISTER" button. If you use this bot in an old account, it will not work.</p>
+            <button class="register-btn" onclick="register()">Register</button>
+            <button class="done-btn" onclick="goToStep2()">Done</button>
         </div>
 
         <!-- Step 2: Confirmation -->
         <div id="step2" class="hidden">
-            <p>Really? Are you sure? Remember, if you did not create a new account, the hack will not work.</p>
-            <button onclick="startProcess()">Yes, I'm sure.</button>
-            <button onclick="goToStep1()">No, okay wait, I register.</button>
+            <h1>Confirmation!</h1>
+            <p>Are you sure that you've created a new account? Remember, if you use this bot in an old account, and if you lose, we are not responsible for the loss.</p>
+            <button class="confirm-btn" onclick="goToDashboard()">Yes, I've created a new account</button>
+            <button class="back-btn" onclick="goToStep1()">No, I'll register</button>
         </div>
 
-        <!-- Step 3: Main Bot Logic -->
+        <!-- Step 3: Dashboard -->
         <div id="step3" class="hidden">
-            <h1>Interactive Bot</h1>
-            <p id="question">Enter your UID:</p>
-            <input type="text" id="input" placeholder="Type here..." />
-            <button onclick="processInput()">Send</button>
-            <p id="response"></p>
-            <button onclick="newScript()" style="display:none;" id="newBtn">Start Again</button>
+            <h1>Dashboard</h1>
+            <input type="text" id="name" placeholder="Name" />
+            <input type="number" id="uid" placeholder="UID" />
+            <p>Enter the UID of the new account that you've created.</p>
+            <input type="number" id="balance" placeholder="Balance (Optional)" />
+            <button class="dashboard-btn" onclick="login()">Login</button>
+        </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>UID</th>
-                        <th>Name</th>
-                        <th>Balance</th>
-                        <th>Period</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody id="infoTable">
-                    <tr>
-                        <td id="uidCell">-</td>
-                        <td id="nameCell">-</td>
-                        <td id="balanceCell">-</td>
-                        <td id="periodCell">-</td>
-                        <td id="resultCell">-</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Step 4: Period Input -->
+        <div id="step4" class="hidden">
+            <div class="box">
+                <p><strong>Name:</strong> <span id="displayName"></span></p>
+                <p><strong>UID:</strong> <span id="displayUID"></span></p>
+                <p><strong>Balance:</strong> <span id="displayBalance"></span></p>
+                <button class="dashboard-btn" onclick="editInfo()">Edit Info</button>
+            </div>
+            <div class="box">
+                <input type="number" id="period" placeholder="Enter Period (Min. 3 numbers)" />
+                <button class="start-btn" onclick="start()">Start</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Result -->
+        <div id="step5" class="hidden">
+            <h2>OK, What was the last result?</h2>
+            <button class="dashboard-btn" onclick="processResult('big')">Big</button>
+            <button class="dashboard-btn" onclick="processResult('small')">Small</button>
+        </div>
+
+        <!-- Step 6: Processing -->
+        <div id="step6" class="hidden">
+            <h1>Processing...</h1>
+        </div>
+
+        <!-- Step 7: Final Result -->
+        <div id="step7" class="hidden">
+            <div class="box">
+                <p><strong>Period:</strong> <span id="finalPeriod"></span></p>
+                <p><strong>Result:</strong> <span id="finalResult"></span></p>
+            </div>
+            <button class="re-start-btn" onclick="restart()">Re-Start</button>
+            <button class="back-btn" onclick="goToStep4()">Back</button>
         </div>
     </div>
 
     <script>
-        let step = 1;
-        let userUID = "";
-        let userName = "";
-        let userBalance = 0;
-        let userNumber = 0;
-
-        // Simulate registration process
         function register() {
-            alert("Registering a new account...");
+            window.open("https://91clubaa.in", "_blank");
         }
 
-        // Go to Step 2
         function goToStep2() {
             document.getElementById("step1").classList.add("hidden");
             document.getElementById("step2").classList.remove("hidden");
         }
 
-        // Return to Step 1
         function goToStep1() {
             document.getElementById("step2").classList.add("hidden");
             document.getElementById("step1").classList.remove("hidden");
         }
 
-        // Start the main process (Step 3)
-        function startProcess() {
+        function goToDashboard() {
             document.getElementById("step2").classList.add("hidden");
             document.getElementById("step3").classList.remove("hidden");
         }
 
-        // Main logic to process input
-        function processInput() {
-            const inputField = document.getElementById("input");
-            const response = document.getElementById("response");
-            const newBtn = document.getElementById("newBtn");
-            const question = document.getElementById("question");
+        function login() {
+            const name = document.getElementById("name").value;
+            const uid = document.getElementById("uid").value;
+            const balance = document.getElementById("balance").value;
 
-            const input = inputField.value.trim();
-            if (!input) {
-                response.textContent = "Please enter something!";
+            if (!name || !uid) {
+                alert("Name and UID are required!");
                 return;
             }
 
-            if (step === 1) {
-                userUID = input;
-                document.getElementById("uidCell").textContent = userUID;
-                question.textContent = "What's your name?";
-                inputField.value = "";
-                response.textContent = "";
-                step = 2;
-            } else if (step === 2) {
-                userName = input;
-                document.getElementById("nameCell").textContent = userName;
-                question.textContent = `OK, ${userName}, tell me your balance.`;
-                inputField.value = "";
-                response.textContent = "";
-                step = 3;
-            } else if (step === 3) {
-                if (isNaN(input)) {
-                    response.textContent = "Please enter a valid number!";
-                    return;
-                }
-                userBalance = parseFloat(input);
-                document.getElementById("balanceCell").textContent = userBalance;
-                question.textContent = "Tell me the number (Period):";
-                inputField.value = "";
-                response.textContent = "";
-                step = 4;
-            } else if (step === 4) {
-                if (isNaN(input)) {
-                    response.textContent = "Please enter a valid number!";
-                    return;
-                }
-                userNumber = parseInt(input, 10);
-                document.getElementById("periodCell").textContent = userNumber;
-                question.textContent = "OK, now tell me what was the last result: Big or Small?";
-                inputField.value = "";
-                response.textContent = "";
-                step = 5;
-            } else if (step === 5) {
-                if (input.toLowerCase() !== "big" && input.toLowerCase() !== "small") {
-                    response.textContent = "Please enter 'big' or 'small'!";
-                    return;
-                }
-                const lastDigit = userNumber % 10;
-                let result;
-
-                if (lastDigit % 2 === 1) {
-                    result = input.toUpperCase(); // If odd, show the user's input.
-                } else {
-                    result = Math.random() < 0.5 ? "BIG" : "SMALL"; // If even, randomize the result.
-                }
-
-                document.getElementById("resultCell").textContent = result;
-                response.textContent = `OK, the result is ${result}`;
-                question.textContent = "If you want to start again, click 'Start Again'.";
-                inputField.style.display = "none";
-                newBtn.style.display = "block";
-                step = 6;
-            }
-        }
-
-        // Reset everything
-        function newScript() {
-            step = 1;
-            userUID = "";
-            userName = "";
-            userBalance = 0;
-            userNumber = 0;
-
-            document.getElementById("uidCell").textContent = "-";
-            document.getElementById("nameCell").textContent = "-";
-            document.getElementById("balanceCell").textContent = "-";
-            document.getElementById("periodCell").textContent = "-";
-            document.getElementById("resultCell").textContent = "-";
-
-            document.getElementById("response").textContent = "";
-            document.getElementById("newBtn").style.display = "none";
+            document.getElementById("displayName").textContent = name;
+            document.getElementById("displayUID").textContent = uid;
+            document.getElementById("displayBalance").textContent = balance || "Fixed";
 
             document.getElementById("step3").classList.add("hidden");
-            document.getElementById("step1").classList.remove("hidden");
+            document.getElementById("step4").classList.remove("hidden");
+        }
+
+        function editInfo() {
+            document.getElementById("step4").classList.add("hidden");
+            document.getElementById("step3").classList.remove("hidden");
+        }
+
+        function start() {
+            const period = document.getElementById("period").value;
+            if (period.length < 3) {
+                alert("Period must be at least 3 numbers!");
+                return;
+            }
+
+            document.getElementById("step4").classList.add("hidden");
+            document.getElementById("step5").classList.remove("hidden");
+        }
+
+        function processResult(choice) {
+            const period = document.getElementById("period").value;
+            const lastDigit = period % 10;
+
+            document.getElementById("finalPeriod").textContent = period;
+
+            if (lastDigit % 2 === 1) {
+                document.getElementById("finalResult").textContent = choice.toUpperCase();
+            } else {
+                document.getElementById("finalResult").textContent = Math.random() < 0.5 ? "BIG" : "SMALL";
+            }
+
+            document.getElementById("step5").classList.add("hidden");
+            document.getElementById("step6").classList.remove("hidden");
+
+            setTimeout(() => {
+                document.getElementById("step6").classList.add("hidden");
+                document.getElementById("step7").classList.remove("hidden");
+            }, 2000);
+        }
+
+        function restart() {
+            document.getElementById("step7").classList.add("hidden");
+            document.getElementById("step4").classList.remove("hidden");
+        }
+
+        function goToStep4() {
+            document.getElementById("step7").classList.add("hidden");
+            document.getElementById("step4").classList.remove("hidden");
         }
     </script>
 </body>
